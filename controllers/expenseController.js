@@ -73,6 +73,27 @@ const updateExpense = async (req, res) => {
   }
 };
 
-const deleteExpense = () => {};
+// Delete an expense
+const deleteExpense = async (req, res) => {
+  try {
+    const { expenseId } = req.params;
+
+    const expense = await Expenses.findOneAndDelete({
+      _id: expenseId,
+      userId: req.user.id,
+    });
+    if (!expense) {
+      return res
+        .status(404)
+        .json({ message: "Expense not found or unauthorized" });
+    }
+
+    res.status(200).json({ message: "Expense deleted" });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Failed to delete expense", error: error.message });
+  }
+};
 
 module.exports = { createExpense, getExpense, updateExpense, deleteExpense };
