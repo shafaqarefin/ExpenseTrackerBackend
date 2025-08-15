@@ -60,9 +60,13 @@ const login = async (req, res) => {
 
 // Logout
 const logout = (req, res) => {
-  // If you implement cookie JWT, clear the cookie here
-  // res.clearCookie('token', { httpOnly: true });
+  res.clearCookie('token', { 
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict'
+  });
   res.status(200).json({ message: 'Logout successful' });
 };
+
 
 module.exports = { signup, login, logout };
