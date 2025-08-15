@@ -11,7 +11,7 @@ connectDB()
 
 // Importing Routes
 const authRoutes = require('./routes/authRoute');
-// const userRoutes = require('./routes/userRoutes');
+const expenseRoutes=require('./routes/expenseRoute')
 
 //Declaring necessary variables
 const app = express();
@@ -25,11 +25,10 @@ app.use(cors({                  // Optional: allow my frontend to call API
   credentials: true
 }));
 
-// Routes
+// Using Routes with applicable middlewares
 app.use('/api/auth', authRoutes);
-app.get('/test',restrictToLoggedInUser,(req,res)=>{
-  res.status(200).send('bal')
-})
+app.use('/api/expense',restrictToLoggedInUser,expenseRoutes)
+
 
 
 // Start server
