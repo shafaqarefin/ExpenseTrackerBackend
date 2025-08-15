@@ -40,8 +40,37 @@ const getExpense = async (req, res) => {
   }
 };
 
-const updateExpense = () => {};
+const updateExpense = async (req, res) => {
+  try {
+    const { expenseId } = req.params;
 
-const deleteExpense = () => {};
+    const { title, amount, category, date } = req.body;
+
+    const expense = await Expenses.findOne({
+      _id: expenseId,
+      userId: req.user.id,
+    });
+
+    if (!expense) {
+      return res
+        .status(404)
+        .json({ message: "Expense not found or unauthorized" });
+    }
+
+    if (title) expense.title = title;
+    if (amount) expense.amount = amount;
+    if (category) expense.category = category;
+    if (date) expense.date = date;
+
+    const updatedExpense = await expense.save();
+    res
+      .status(200)
+      .json({ message: "Expense updated", expense: updatedExpense });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Failed to update expense", error: error.message });
+  }
+};
 
 module.exports = { createExpense, getExpense, updateExpense, deleteExpense };
