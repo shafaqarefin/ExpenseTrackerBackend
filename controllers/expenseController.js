@@ -73,4 +73,6 @@ const updateExpense = async (req, res) => {
   }
 };
 
+const deleteExpense = () => {};
+
 module.exports = { createExpense, getExpense, updateExpense, deleteExpense };
